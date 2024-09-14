@@ -1,24 +1,16 @@
 package com.bank.database.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import lombok.*;
 
-import java.time.Instant;
-
+@EqualsAndHashCode(callSuper = false)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Entity
 @Table(name = "transfers")
-@MappedSuperclass
-@EntityListeners(AuditingEntityListener.class)
-public class Transfer {
+public class Transfer extends Audit{
 
     @Id
     @Column(name = "id")
@@ -34,7 +26,4 @@ public class Transfer {
 
     @Enumerated(EnumType.STRING)
     private OperationType operationType;
-
-    @CreatedDate
-    private Instant createdAt;
 }

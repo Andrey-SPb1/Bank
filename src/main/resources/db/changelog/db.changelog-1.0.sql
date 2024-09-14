@@ -11,8 +11,8 @@ CREATE TABLE IF NOT EXISTS wallets
 CREATE TABLE IF NOT EXISTS transfers
 (
     id            BIGSERIAL PRIMARY KEY,
-    wallet_id     INT REFERENCES wallets (id),
+    wallet_id     BIGINT REFERENCES wallets (id),
     amount        INT NOT NULL,
-    operationType VARCHAR(32),
-    createdAt     TIMESTAMP
+    operation_type VARCHAR(32) CHECK (operation_type in ('DEPOSIT','WITHDRAW')),
+    created_at     TIMESTAMP
 );
