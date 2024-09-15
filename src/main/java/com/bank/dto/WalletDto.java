@@ -1,4 +1,8 @@
 package com.bank.dto;
 
-public record WalletDto(Integer balance) {
+import jakarta.validation.constraints.Min;
+
+public record WalletDto(
+        @Min(0)
+        Integer balance) {
 }

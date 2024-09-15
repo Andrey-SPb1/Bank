@@ -24,10 +24,9 @@ public class TransferService {
     private final TransferRepository transferRepository;
     private final Lock transferLock = new ReentrantLock();
 
-    public TransferDto findById(Long id) {
+    public Optional<TransferDto> findById(Long id) {
         return transferRepository.findById(id)
-                .map(transferMapper::mapToDto)
-                .orElseThrow();
+                .map(transferMapper::mapToDto);
     }
 
     @Transactional(rollbackFor = Exception.class, isolation = Isolation.READ_COMMITTED)
@@ -40,13 +39,14 @@ public class TransferService {
         Optional.of(transfer)
                 .map(transferMapper::mapToEntity)
                 .map(transferRepository::save)
-                .orElseThrow();
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
     }
 
     private void deposit(TransferDto transfer) {
         transferLock.lock();
         try {
-            int balance = walletRepository.getBalanceById(transfer.walletId()).orElseThrow();
+            int balance = walletRepository.getBalanceById(transfer.walletId())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
             int newBalance = balance + transfer.amount();
             walletRepository.setBalanceById(transfer.walletId(), newBalance);
         } finally {
@@ -57,9 +57,9 @@ public class TransferService {
     private void withdraw(TransferDto transfer) {
         transferLock.lock();
         try {
-            int balance = walletRepository.getBalanceById(transfer.walletId()).orElseThrow();
+            int balance = walletRepository.getBalanceById(transfer.walletId())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
             int newBalance = balance - transfer.amount();
-            System.out.println(balance + " and " + newBalance);
             if (newBalance < 0) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient funds");
             } else {

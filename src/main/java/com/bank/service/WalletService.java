@@ -6,6 +6,8 @@ import com.bank.mapper.WalletMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class WalletService {
@@ -13,9 +15,8 @@ public class WalletService {
     private final WalletRepository walletRepository;
     private final WalletMapper walletMapper;
 
-    public WalletDto findById(Long id) {
+    public Optional<WalletDto> findById(Long id) {
         return walletRepository.findById(id)
-                .map(walletMapper::mapToDto)
-                .orElseThrow();
+                .map(walletMapper::mapToDto);
     }
 }

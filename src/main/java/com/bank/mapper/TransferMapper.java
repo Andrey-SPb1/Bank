@@ -1,6 +1,7 @@
 package com.bank.mapper;
 
 import com.bank.database.entity.Transfer;
+import com.bank.database.entity.Wallet;
 import com.bank.dto.TransferDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,7 @@ public class TransferMapper implements Mapper<Transfer, TransferDto> {
     public Transfer mapToEntity(TransferDto obj) {
         return Transfer.builder()
                 .amount(obj.amount())
+                .wallet(Wallet.builder().id(obj.walletId()).build())
                 .operationType(obj.operationType())
                 .build();
     }
