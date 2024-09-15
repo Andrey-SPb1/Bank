@@ -47,7 +47,7 @@ public class TransferService {
         transferLock.lock();
         try {
             int balance = walletRepository.getBalanceById(transfer.walletId()).orElseThrow();
-            int newBalance = balance - transfer.amount();
+            int newBalance = balance + transfer.amount();
             walletRepository.setBalanceById(transfer.walletId(), newBalance);
         } finally {
             transferLock.unlock();

@@ -24,10 +24,15 @@ dependencies {
     testImplementation 'org.testcontainers:postgresql'
 }
 
+tasks.withType(JavaCompile).configureEach {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
 test {
     useJUnitPlatform()
 }
 
 wrapper {
-    gradleVersion '8.6'
+    gradleVersion '8.5'
 }
