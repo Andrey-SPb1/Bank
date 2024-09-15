@@ -21,4 +21,12 @@ public class Wallet {
 
     @Column(nullable = false)
     private Integer balance;
+
+    public synchronized Integer getBalance() {
+        return balance;
+    }
+
+    public synchronized void setBalance(Integer balance) {
+        this.balance = balance;
+    }
 }

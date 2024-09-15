@@ -1,8 +1,10 @@
 package com.bank.mapper;
 
+import java.util.concurrent.ExecutionException;
+
 public interface Mapper<mapFrom, mapTo> {
 
-    mapTo mapDto(mapFrom obj);
+    mapTo mapToDto(mapFrom obj);
 
-    mapFrom map(mapTo obj);
+    mapFrom mapToEntity(mapTo obj) throws ExecutionException, InterruptedException;
 }

@@ -8,12 +8,12 @@ import org.springframework.stereotype.Component;
 public class WalletMapper implements Mapper<Wallet, WalletDto> {
 
     @Override
-    public WalletDto mapDto(Wallet obj) {
+    public WalletDto mapToDto(Wallet obj) {
         return new WalletDto(obj.getBalance());
     }
 
     @Override
-    public Wallet map(WalletDto obj) {
+    public Wallet mapToEntity(WalletDto obj) {
         return Wallet.builder()
                 .balance(obj.balance())
                 .build();
