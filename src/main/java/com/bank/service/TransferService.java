@@ -4,6 +4,7 @@ import com.bank.database.repository.TransferRepository;
 import com.bank.database.repository.WalletRepository;
 import com.bank.dto.TransferDto;
 import com.bank.mapper.TransferMapper;
+import com.bank.profiling.Profiling;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ public class TransferService {
                 .map(transferMapper::mapToDto);
     }
 
+    @Profiling
     @Transactional(rollbackFor = Exception.class, isolation = Isolation.READ_COMMITTED)
     public void operation(TransferDto transfer) {
         switch (transfer.operationType()) {
