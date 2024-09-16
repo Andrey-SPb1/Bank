@@ -89,7 +89,7 @@ public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
 ```
 
 Чтобы включить или выключить профилирование нужно отправить PUT-запрос 
-**/api/v1/admin/true** или **/api/v1/admin/true** соотвественно.
+**/api/v1/admin/true** или **/api/v1/admin/false** соотвественно.
 
 Для того чтобы узнать статус - **/api/v1/admin/status**
 
