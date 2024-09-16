@@ -37,7 +37,7 @@
 
 ## Задача №1
 
-Changelogs можно по директории: src/main/resources/db/changelog
+Changelogs можно найти по директории: src/main/resources/db/changelog
 
 ## Задача №2
 
