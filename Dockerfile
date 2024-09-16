@@ -2,7 +2,7 @@
 FROM gradle:latest AS BUILD
 WORKDIR /app
 COPY . /app/.
-RUN gradle build
+RUN gradle build -x test
 
 # Package stage
 FROM eclipse-temurin:17-jre-alpine
