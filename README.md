@@ -4,9 +4,9 @@
 
 ## Технологии
 - Java 17
-- Gradle 8.5
 - Spring Boot 3.2.4
 - Hibernate
+- Gradle 8.5
 - Postgresql
 - Liquibase
 - Lombok
