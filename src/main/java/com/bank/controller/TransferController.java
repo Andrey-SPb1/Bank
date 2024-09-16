@@ -17,16 +17,16 @@ public class TransferController {
 
     private final TransferService transferService;
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.OK)
-    public void operation(@RequestBody @Validated TransferDto transfer) {
-        transferService.operation(transfer);
-    }
-
     @GetMapping("/{id}")
     public TransferDto findById(@PathVariable Long id) {
         return transferService.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public void operation(@RequestBody @Validated TransferDto transfer) {
+        transferService.operation(transfer);
     }
 
 }
