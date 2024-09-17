@@ -37,9 +37,12 @@
 
 ## Задача №1
 
-Changelogs можно по директории: src/main/resources/db/changelog
+Changelogs можно найти по директории: src/main/resources/db/changelog
 
 ## Задача №2
+
+Каждый кошелёк защищен от "грязного чтения" во время состояняя гонки потоков, 
+при помощи класса Lock из java.util.concurrent и изоляции метода на уровне "READ_COMMITTED".
 
 При возникающих проблемах сервер будет обрабатывать ответы с http статусом 4xx.
 Например при несуществующем кошельке:
@@ -86,7 +89,7 @@ public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
 ```
 
 Чтобы включить или выключить профилирование нужно отправить PUT-запрос 
-**/api/v1/admin/true** или **/api/v1/admin/true** соотвественно.
+**/api/v1/admin/true** или **/api/v1/admin/false** соотвественно.
 
 Для того чтобы узнать статус - **/api/v1/admin/status**
 
