@@ -8,13 +8,10 @@ import com.bank.profiling.Profiling;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +20,6 @@ public class TransferService {
     private final TransferMapper transferMapper;
     private final WalletRepository walletRepository;
     private final TransferRepository transferRepository;
-    private final Lock transferLock = new ReentrantLock();
 
     public Optional<TransferDto> findById(Long id) {
         return transferRepository.findById(id)
@@ -31,11 +27,12 @@ public class TransferService {
     }
 
     @Profiling
-    @Transactional(rollbackFor = Exception.class, isolation = Isolation.READ_COMMITTED)
+    @Transactional
     public void operation(TransferDto transfer) {
         switch (transfer.operationType()) {
             case DEPOSIT -> deposit(transfer);
             case WITHDRAW -> withdraw(transfer);
+            default -> throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid operation type");
         }
 
         Optional.of(transfer)
@@ -45,31 +42,22 @@ public class TransferService {
     }
 
     private void deposit(TransferDto transfer) {
-        transferLock.lock();
-        try {
-            int balance = walletRepository.getBalanceById(transfer.walletId())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-            int newBalance = balance + transfer.amount();
-            walletRepository.setBalanceById(transfer.walletId(), newBalance);
-        } finally {
-            transferLock.unlock();
-        }
+        Long walletId = transfer.walletId();
+        int balance = walletRepository.getBalanceById(walletId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        int newBalance = balance + transfer.amount();
+        walletRepository.setBalanceById(walletId, newBalance);
     }
 
     private void withdraw(TransferDto transfer) {
-        transferLock.lock();
-        try {
-            int balance = walletRepository.getBalanceById(transfer.walletId())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-            int newBalance = balance - transfer.amount();
-            if (newBalance < 0) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient funds");
-            } else {
-                walletRepository.setBalanceById(transfer.walletId(), newBalance);
-            }
-        } finally {
-            transferLock.unlock();
+        Long walletId = transfer.walletId();
+        int balance = walletRepository.getBalanceById(walletId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        int newBalance = balance - transfer.amount();
+        if (newBalance < 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient funds");
+        } else {
+            walletRepository.setBalanceById(walletId, newBalance);
         }
     }
-
 }
