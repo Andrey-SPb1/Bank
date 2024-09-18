@@ -14,7 +14,6 @@ spring:
         format_sql: true
         hbm2ddl:
           auto: none
-    open-in-view: false
   liquibase:
     enabled: true
     drop-first: false
